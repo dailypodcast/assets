@@ -1,0 +1,157 @@
+/* --- 1. Font Import --- */
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+
+/* --- 2. General Body & Typography --- */
+body {
+    /* M PLUS Rounded 1c is now the primary font for both Japanese and English text for a unified look. */
+    font-family: "M PLUS Rounded 1c", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px; /* Using px instead of pt for better web consistency */
+    line-height: 1.8;
+    color: #333;
+    background-color: #fdfdfd;
+    margin: 0;
+    padding: 20px 30px;
+}
+
+h1, h2 {
+    font-weight: 700; /* Use the bold version of the font */
+}
+
+h2 {
+    font-size: 1.5em; /* 24px */
+    margin-top: 2em;
+    margin-bottom: 1em;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5em;
+    color: #4a4a4a;
+}
+
+a {
+    color: #0073e6; /* You can change this to a different theme color, e.g., sakura pink #FFB7C5 or indigo #4B0082 */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* --- 3. Table of Contents (Mokuji) --- */
+ul.toc {
+    list-style: none;
+    padding: 1em 1.5em;
+    background-color: #f5f5f5;
+    border-left: 4px solid #0073e6;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    display: inline-block;
+    min-width: 300px;
+}
+
+ul.toc li {
+    margin-bottom: 0.5em;
+}
+
+ul.toc a {
+    font-weight: 700;
+}
+
+/* --- 4. Vocabulary & Grammar Section --- */
+.explanation-item {
+    margin-bottom: 1.5em;
+    padding: 0.5em 1em;
+    border-left: 3px solid #ccc;
+    background-color: #fafafa;
+}
+
+/* Renamed from .zh-term to .jp-term */
+.explanation-item strong.jp-term {
+    font-size: 1.6em; /* 25.6px */
+    color: #d63384; /* This pink color provides good contrast */
+    font-weight: 700;
+}
+
+/* Renamed from .zh-example to .jp-example */
+.explanation-item .jp-example {
+    font-size: 1.25em; /* 20px */
+    color: #555;
+    display: block; /* Ensures example is on a new line */
+    margin-top: 0.5em;
+}
+
+
+/* --- 5. Video Player --- */
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+    margin-bottom: 1em;
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden; /* Ensures the iframe corners are rounded */
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* --- 6. Collapsible Transcript --- */
+details {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 2em;
+    background-color: #fafafa;
+    overflow: hidden;
+}
+
+summary {
+    cursor: pointer;
+    padding: 0.5em 1em;
+    background-color: #f1f1f1;
+}
+
+summary:hover {
+    background-color: #e9e9e9;
+}
+
+summary h2 {
+    display: inline-block;
+    border: none;
+    margin: 0;
+    padding: 0;
+    font-size: 1.5em;
+}
+
+.transcript-content {
+    padding: 1em 1.5em;
+    border-top: 1px solid #ddd;
+}
+
+details[open] summary {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #e9e9e9; /* Slightly different color when open and sticky */
+}
+
+details[open] .transcript-content {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* --- 7. Timestamp List --- */
+.timestamp-list {
+    list-style: none;
+    padding-left: 0;
+}
+.timestamp-list li {
+    margin-bottom: 0.5em;
+}
+.timestamp-list a {
+    font-weight: 700;
+}
