@@ -155,3 +155,28 @@ details[open] .transcript-content {
 .timestamp-list a {
     font-weight: 700;
 }
+
+/* --- 8. Print Optimization (Tối ưu hóa khi in) --- */
+@media print {
+    /* Ẩn video player vì không cần thiết khi in trên giấy */
+    .video-container {
+        display: none !important;
+    }
+
+    /* Đảm bảo nội dung trong thẻ details không bị cắt khúc hoặc giới hạn chiều cao */
+    details[open] .transcript-content {
+        max-height: none !important;
+        overflow-y: visible !important;
+    }
+
+    /* Loại bỏ sticky của summary khi in để tránh chữ bị đè lên nhau */
+    details[open] summary {
+        position: static !important;
+    }
+    
+    /* Thiết lập lại màu nền và màu chữ cơ bản để tiết kiệm mực in */
+    body {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+}
