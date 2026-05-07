@@ -120,32 +120,101 @@ document.addEventListener('DOMContentLoaded', initializeUI);
 
 
 // ==========================================================
-// Phần 3: Hỗ trợ in ấn (Print Support)
+// Phần 3: Hỗ trợ in ấn (Tạo nút In chuyên biệt - Giải pháp 3)
 // ==========================================================
-// Biến lưu trữ trạng thái của các thẻ details trước khi gọi lệnh in
-let detailsStates = [];
-
-// Bắt sự kiện trước khi trình duyệt hiển thị hộp thoại in
-window.addEventListener('beforeprint', () => {
-    const detailsElements = document.querySelectorAll('details');
+function injectPrintButtons() {
+    // Tìm các khối chi tiết cần tạo nút In
+    const transcriptContents = document.querySelectorAll('.transcript-content');
     
-    // Lưu lại trạng thái đóng/mở hiện tại của từng thẻ
-    detailsStates = Array.from(detailsElements).map(details => details.open);
-    
-    // Tự động mở tất cả các thẻ details để in được toàn bộ nội dung (transcript)
-    detailsElements.forEach(details => {
-        details.open = true;
+    transcriptContents.forEach((content) => {
+        // Tìm thẻ <summary> ngay phía trên nó để chèn nút
+        const summary = content.previousElementSibling;
+        if (summary && summary.tagName.toLowerCase() === 'summary') {
+            if (!summary.querySelector('.jdp-print-btn')) {
+                const btn = document.createElement('button');
+                btn.className = 'jdp-print-btn no-print';
+                btn.innerHTML = '🖨️ Print Transcript';
+                
+                // Style nổi bật cho nút
+                btn.style.marginLeft = '15px';
+                btn.style.padding = '8px 16px';
+                btn.style.cursor = 'pointer';
+                btn.style.border = 'none';
+                btn.style.borderRadius = '6px';
+                btn.style.backgroundColor = '#ff9800'; // Màu cam nổi bật
+                btn.style.color = '#ffffff';
+                btn.style.fontWeight = 'bold';
+                btn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.15)';
+                btn.style.transition = 'all 0.2s ease';
+                
+                // Hiệu ứng di chuột (hover)
+                btn.onmouseover = () => {
+                    btn.style.backgroundColor = '#e68a00';
+                    btn.style.transform = 'translateY(-1px)';
+                    btn.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                };
+                btn.onmouseout = () => {
+                    btn.style.backgroundColor = '#ff9800';
+                    btn.style.transform = 'translateY(0)';
+                    btn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.15)';
+                };
+                
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    printFullPage();
+                };
+                
+                summary.appendChild(btn);
+            }
+        }
     });
-});
+}
 
-// Bắt sự kiện sau khi người dùng đóng hộp thoại in (in xong hoặc hủy in)
-window.addEventListener('afterprint', () => {
-    const detailsElements = document.querySelectorAll('details');
-    
-    // Khôi phục lại trạng thái đóng/mở ban đầu cho các thẻ details
-    detailsElements.forEach((details, index) => {
-        details.open = detailsStates[index];
+function printFullPage() {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+        alert("Vui lòng cho phép mở Popup trên trình duyệt để in!");
+        return;
+    }
+
+    // 1. Không hardcode CSS. Lấy y nguyên toàn bộ CSS của trang hiện tại.
+    let styles = '';
+    document.querySelectorAll('link[rel="stylesheet"], style').forEach(el => {
+        styles += el.outerHTML;
     });
-});
+
+    // 2. Không hardcode HTML. Lấy y nguyên toàn bộ nội dung thẻ body.
+    const bodyContent = document.body.innerHTML;
+
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <title>Bản in bài học</title>
+                ${styles}
+            </head>
+            <body>
+                ${bodyContent}
+            </body>
+        </html>
+    `);
+    printWindow.document.close();
+
+    // 3. Tự động expand hết thông tin trong các thẻ details ra
+    printWindow.document.querySelectorAll('details').forEach(detail => {
+        detail.setAttribute('open', 'true');
+    });
+
+    // Đợi CSS/DOM load xong rồi gọi lệnh in
+    setTimeout(() => {
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    }, 500);
+}
+
+// Khởi chạy khi DOM đã load xong
+document.addEventListener('DOMContentLoaded', injectPrintButtons);
 
 // --- Kết thúc file script.js ---
