@@ -190,8 +190,38 @@ function createFloatingTOC() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    injectPrintButtons();
-    formatSpeakers();
-    createFloatingTOC();
-});
+// ==========================================================
+// Phần 5: Auto-migrate bài post cũ
+// ==========================================================
+function migrateOldTranscripts() {
+    const detailsElements = document.querySelectorAll('details');
+    detailsElements.forEach(detail => {
+        const content = detail.querySelector('.transcript-content');
+        if (content) {
+            const section = document.createElement('section');
+            section.className = 'transcript';
+            
+            const summary = detail.querySelector('summary');
+            if (summary) {
+                const h2 = summary.querySelector('h2');
+                if (h2) {
+                    h2.innerHTML = h2.innerHTML.replace(/\(Click to expand\/collapse\)/gi, '').trim();
+                    section.appendChild(h2);
+                }
+            }
+            
+            section.appendChild(content);
+            detail.parentNode.replaceChild(section, detail);
+        }
+    });
+}
+
+if (!window.dailyPodcastDOMInitialized) {
+    window.dailyPodcastDOMInitialized = true;
+    document.addEventListener('DOMContentLoaded', () => {
+        migrateOldTranscripts();
+        injectPrintButtons();
+        formatSpeakers();
+        createFloatingTOC();
+    });
+}

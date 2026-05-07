@@ -56,8 +56,7 @@ function initializeUI() {
 
 }
 
-// Chạy hàm khởi tạo giao diện khi toàn bộ nội dung trang đã sẵn sàng
-document.addEventListener('DOMContentLoaded', initializeUI);
+// Hàm khởi tạo giao diện sẽ được gọi ở cuối file
 
 
 // ==========================================================
@@ -235,11 +234,43 @@ function createFloatingTOC() {
     });
 }
 
-// Khởi chạy khi DOM đã load xong
-document.addEventListener('DOMContentLoaded', () => {
-    injectPrintButtons();
-    formatSpeakers();
-    createFloatingTOC();
-});
+// ==========================================================
+// Phần 6: Auto-migrate bài post cũ
+// ==========================================================
+function migrateOldTranscripts() {
+    const detailsElements = document.querySelectorAll('details');
+    detailsElements.forEach(detail => {
+        const content = detail.querySelector('.transcript-content');
+        if (content) {
+            const section = document.createElement('section');
+            section.className = 'transcript';
+            
+            const summary = detail.querySelector('summary');
+            if (summary) {
+                const h2 = summary.querySelector('h2');
+                if (h2) {
+                    // Xóa dòng chữ (Click to expand/collapse) nếu có
+                    h2.innerHTML = h2.innerHTML.replace(/\(Click to expand\/collapse\)/gi, '').trim();
+                    section.appendChild(h2);
+                }
+            }
+            
+            section.appendChild(content);
+            detail.parentNode.replaceChild(section, detail);
+        }
+    });
+}
+
+// Khởi chạy khi DOM đã load xong (Bảo vệ chống chạy 2 lần nếu bài cũ có chèn sẵn link script)
+if (!window.dailyPodcastDOMInitialized) {
+    window.dailyPodcastDOMInitialized = true;
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof initializeUI === 'function') initializeUI();
+        migrateOldTranscripts();
+        injectPrintButtons();
+        formatSpeakers();
+        createFloatingTOC();
+    });
+}
 
 // --- Kết thúc file script.js ---
