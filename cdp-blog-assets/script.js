@@ -170,7 +170,28 @@ function printFullPage() {
     }, 500);
 }
 
+// ==========================================================
+// Phần 4: Tự động in đậm tên người nói trong đoạn hội thoại
+// ==========================================================
+function formatSpeakers() {
+    // Tìm tất cả các đoạn văn trong phần transcript
+    const paragraphs = document.querySelectorAll('.transcript-content p');
+    
+    paragraphs.forEach(p => {
+        let html = p.innerHTML;
+        // Regex: (khoảng trắng đầu dòng nếu có) + (1-30 ký tự không chứa ngoặc < > hoặc dấu hai chấm) + (dấu : hoặc ：)
+        const regex = /^(\s*)([^:<：>]{1,30})([:：])/;
+        if (regex.test(html)) {
+            // Bao bọc phần tên và dấu hai chấm bằng thẻ <strong>
+            p.innerHTML = html.replace(regex, '$1<strong>$2$3</strong>');
+        }
+    });
+}
+
 // Khởi chạy khi DOM đã load xong
-document.addEventListener('DOMContentLoaded', injectPrintButtons);
+document.addEventListener('DOMContentLoaded', () => {
+    injectPrintButtons();
+    formatSpeakers();
+});
 
 // --- Kết thúc file script.js ---

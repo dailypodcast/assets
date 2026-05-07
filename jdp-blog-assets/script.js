@@ -128,4 +128,22 @@ function printFullPage() {
     }, 500);
 }
 
-document.addEventListener('DOMContentLoaded', injectPrintButtons);
+// ==========================================================
+// Phần 3: Tự động in đậm tên người nói trong đoạn hội thoại
+// ==========================================================
+function formatSpeakers() {
+    const paragraphs = document.querySelectorAll('.transcript-content p');
+    
+    paragraphs.forEach(p => {
+        let html = p.innerHTML;
+        const regex = /^(\s*)([^:<：>]{1,30})([:：])/;
+        if (regex.test(html)) {
+            p.innerHTML = html.replace(regex, '$1<strong>$2$3</strong>');
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    injectPrintButtons();
+    formatSpeakers();
+});
