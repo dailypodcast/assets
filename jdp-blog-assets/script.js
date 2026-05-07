@@ -73,7 +73,7 @@ function injectPrintButtons() {
 function printFullPage() {
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
-        alert("Vui lòng cho phép mở Popup trên trình duyệt để in!");
+        alert("Please allow popups in your browser to print!");
         return;
     }
 
@@ -90,7 +90,7 @@ function printFullPage() {
         <!DOCTYPE html>
         <html>
             <head>
-                <title>Bản in bài học</title>
+                <title>Transcript Printout</title>
                 ${styles}
             </head>
             <body>
