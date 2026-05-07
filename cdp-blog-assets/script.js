@@ -188,10 +188,58 @@ function formatSpeakers() {
     });
 }
 
+// ==========================================================
+// Phần 5: Nút Mục lục nổi (Floating TOC)
+// ==========================================================
+function createFloatingTOC() {
+    const originalToc = document.querySelector('ul.toc');
+    if (!originalToc) return;
+
+    const container = document.createElement('div');
+    container.className = 'floating-toc-container no-print';
+    
+    const btn = document.createElement('button');
+    btn.className = 'floating-toc-btn';
+    btn.innerHTML = '📑';
+    btn.title = 'Table of Contents';
+    
+    const panel = document.createElement('div');
+    panel.className = 'floating-toc-panel';
+    
+    const panelTitle = document.createElement('h3');
+    panelTitle.innerText = '📌 目録 / TOC';
+    panel.appendChild(panelTitle);
+    
+    const clonedToc = originalToc.cloneNode(true);
+    panel.appendChild(clonedToc);
+    
+    container.appendChild(btn);
+    container.appendChild(panel);
+    document.body.appendChild(container);
+    
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        panel.classList.toggle('active');
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (!container.contains(e.target)) {
+            panel.classList.remove('active');
+        }
+    });
+    
+    clonedToc.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            panel.classList.remove('active');
+        });
+    });
+}
+
 // Khởi chạy khi DOM đã load xong
 document.addEventListener('DOMContentLoaded', () => {
     injectPrintButtons();
     formatSpeakers();
+    createFloatingTOC();
 });
 
 // --- Kết thúc file script.js ---
