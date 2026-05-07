@@ -54,34 +54,6 @@ function initializeUI() {
         greetingElement.innerText = greeting;
     }
 
-    // Thiết lập sự kiện và hiệu ứng cho các nút social
-    const circles = document.querySelectorAll('.social div');
-    let index = 0;
-
-    function showTooltipSequentially() {
-        if (circles.length === 0) return;
-        const current = circles[index];
-        current.classList.add('show-tooltip');
-        setTimeout(() => {
-            current.classList.remove('show-tooltip');
-            index = (index + 1) % circles.length;
-        }, 3000);
-    }
-
-    showTooltipSequentially();
-    setInterval(showTooltipSequentially, 10000);
-
-    document.querySelector('.youtube').addEventListener('click', function () {
-        window.open('https://www.youtube.com/@ChineseDailyPodcast', '_blank');
-    });
-
-    document.querySelector('.coffe').addEventListener('click', function () {
-        window.open('https://buymeacoffee.com/chinesedailypodcast', '_blank');
-    });
-
-    document.querySelector('.spotify-channel').addEventListener('click', function () {
-        window.open('https://open.spotify.com/show/0hzr17Qx90pgV0PcfXOyrd', '_blank');
-    });
 }
 
 // Chạy hàm khởi tạo giao diện khi toàn bộ nội dung trang đã sẵn sàng
@@ -145,6 +117,12 @@ function printFullPage() {
         return;
     }
 
+    // 1. Lấy toàn bộ CSS của trang web hiện tại để giữ nguyên font chữ, màu sắc
+    let styles = '';
+    document.querySelectorAll('link[rel="stylesheet"], style').forEach(el => {
+        styles += el.outerHTML;
+    });
+
     // Ưu tiên lấy vùng post-body trên Blogger để tránh lỗi CSS dàn trang, nếu không có thì lấy toàn bộ body
     const postContainer = document.querySelector('.post-body') || document.body;
     const bodyContent = postContainer.innerHTML;
@@ -154,21 +132,9 @@ function printFullPage() {
         <html>
             <head>
                 <title>Transcript Printout</title>
+                ${styles}
                 <style>
-                    /* CSS Tối giản tuyệt đối cho bản in để chống lại CSS lỗi của Blogger */
-                    body {
-                        font-family: Arial, sans-serif;
-                        line-height: 1.6;
-                        color: #000;
-                        background: #fff;
-                        padding: 20px;
-                        max-width: 100%;
-                    }
-                    h1, h2, h3 { color: #000; page-break-after: avoid; }
-                    p, div, li { page-break-inside: avoid; }
-                    img, iframe { max-width: 100%; height: auto; }
-                    
-                    /* Reset cấu trúc layout của Blogger khi in */
+                    /* Reset cấu trúc layout của Blogger khi in để không bị cắt trang */
                     body, html { 
                         height: auto !important; 
                         overflow: visible !important; 
@@ -184,16 +150,9 @@ function printFullPage() {
                         display: none !important;
                     }
                     
-                    /* Format transcript cho bản in */
-                    .transcript {
-                        background: none !important;
-                        border: none !important;
-                        padding: 0 !important;
-                        box-shadow: none !important;
-                    }
-                    
-                    .zh {
-                        margin-bottom: 15px;
+                    /* Mở rộng không gian in */
+                    body {
+                        padding: 20px !important;
                     }
                 </style>
             </head>

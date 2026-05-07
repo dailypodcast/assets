@@ -75,6 +75,12 @@ function printFullPage() {
         return;
     }
 
+    // 1. Lấy toàn bộ CSS của trang web hiện tại để giữ nguyên font chữ, màu sắc
+    let styles = '';
+    document.querySelectorAll('link[rel="stylesheet"], style').forEach(el => {
+        styles += el.outerHTML;
+    });
+
     // Ưu tiên lấy vùng post-body trên Blogger để tránh lỗi CSS dàn trang, nếu không có thì lấy toàn bộ body
     const postContainer = document.querySelector('.post-body') || document.body;
     const bodyContent = postContainer.innerHTML;
@@ -84,21 +90,9 @@ function printFullPage() {
         <html>
             <head>
                 <title>Transcript Printout</title>
+                ${styles}
                 <style>
-                    /* CSS Tối giản tuyệt đối cho bản in để chống lại CSS lỗi của Blogger */
-                    body {
-                        font-family: Arial, sans-serif;
-                        line-height: 1.6;
-                        color: #000;
-                        background: #fff;
-                        padding: 20px;
-                        max-width: 100%;
-                    }
-                    h1, h2, h3 { color: #000; page-break-after: avoid; }
-                    p, div, li { page-break-inside: avoid; }
-                    img, iframe { max-width: 100%; height: auto; }
-                    
-                    /* Reset cấu trúc layout của Blogger khi in */
+                    /* Reset cấu trúc layout của Blogger khi in để không bị cắt trang */
                     body, html { 
                         height: auto !important; 
                         overflow: visible !important; 
@@ -114,16 +108,9 @@ function printFullPage() {
                         display: none !important;
                     }
                     
-                    /* Format transcript cho bản in */
-                    .transcript {
-                        background: none !important;
-                        border: none !important;
-                        padding: 0 !important;
-                        box-shadow: none !important;
-                    }
-                    
-                    .zh {
-                        margin-bottom: 15px;
+                    /* Mở rộng không gian in */
+                    body {
+                        padding: 20px !important;
                     }
                 </style>
             </head>
