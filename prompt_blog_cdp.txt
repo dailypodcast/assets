@@ -185,13 +185,7 @@ LƯU Ý QUAN TRỌNG: KHÔNG chèn bất kỳ thẻ <script> nào vào body bài
 - output in code block
 
 - Input đầu vào:
-
-1. youtube_metadata:
-```
-${step4_result}
-```
-
-2. script_content:
+ script_content:
 ```
 
 ${srt_content}
