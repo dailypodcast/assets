@@ -81,22 +81,37 @@ function cleanOldScriptTags() {
 
         if (!content) continue;
 
-        const hasYouTubeScript = regexYouTube.test(content);
-        const hasCustomScript = regexCustomJS.test(content);
+        const regexDetails = /<details[^>]*>\s*<summary[^>]*>\s*<h2([^>]*)>([\s\S]*?)<\/h2>\s*<\/summary>\s*(<div[^>]*class=['"]transcript-content['"][^>]*>[\s\S]*?<\/div>)\s*<\/details>/gi;
 
-        if (hasYouTubeScript || hasCustomScript) {
+        // Đếm số lượng, không dùng .test() vì cờ /g sẽ làm sai lệch trạng thái RegExp
+        const countYouTube = (content.match(regexYouTube) || []).length;
+        const countCustomJS = (content.match(regexCustomJS) || []).length;
+        const countDetails = (content.match(regexDetails) || []).length;
+
+        if (countYouTube > 0 || countCustomJS > 0 || countDetails > 0) {
           totalFixed++;
 
           if (DRY_RUN) {
-            Logger.log(`[CẦN XÓA] Bài viết: "${post.title}"`);
-            if (hasYouTubeScript) Logger.log(`  -> Phát hiện thẻ YouTube iframe_api`);
-            if (hasCustomScript) Logger.log(`  -> Phát hiện thẻ custom script.js`);
+            Logger.log(`[CẦN XỬ LÝ] Bài viết: "${post.title}"`);
+            if (countYouTube > 0) Logger.log(`  -> Phát hiện thẻ YouTube iframe_api`);
+            if (countCustomJS > 0) Logger.log(`  -> Phát hiện thẻ custom script.js`);
+            if (countDetails > 0) Logger.log(`  -> Phát hiện thẻ <details> chứa Transcript cần convert sang <section>`);
           } else {
-            Logger.log(`[ĐANG XÓA & LƯU] Bài viết: "${post.title}"`);
+            Logger.log(`[ĐANG XỬ LÝ & LƯU] Bài viết: "${post.title}"`);
 
             let newContent = content;
+            // 1. Xóa thẻ script thừa
             newContent = newContent.replace(regexYouTube, '');
             newContent = newContent.replace(regexCustomJS, '');
+            
+            // 2. Convert <details> sang <section>
+            if (countDetails > 0) {
+              newContent = newContent.replace(regexDetails, function(match, h2Attrs, h2Content, divContent) {
+                // Xóa chữ "(Click to expand/collapse)" nếu có
+                const cleanH2 = h2Content.replace(/\(Click to expand\/collapse\)/gi, '').trim();
+                return `<section class="transcript">\n  <h2${h2Attrs}>${cleanH2}</h2>\n  ${divContent}\n</section>`;
+              });
+            }
 
             const updateUrl = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts/${post.id}`;
             const updatePayload = {
@@ -118,6 +133,9 @@ function cleanOldScriptTags() {
               if (patchResponse.getResponseCode() !== 200) {
                 Logger.log(`  -> [LỖI LƯU BÀI] ${patchResponse.getContentText()}`);
               }
+              
+              // Tạm dừng 1 giây để tránh lỗi 429 Quota Exceeded (giới hạn 100 request/phút)
+              Utilities.sleep(1000);
             } catch (e) {
               Logger.log(`  -> [LỖI API LƯU] ${e.message}`);
             }
