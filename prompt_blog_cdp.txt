@@ -22,9 +22,15 @@ Phân tích nội dung: Đọc và hiểu sâu script_content để trích xuấ
 
 ✅ Chi tiết từng phần (Section Details):
 
+Difficulty Level:
+
+Dựa trên nội dung script_content, đánh giá mức độ khó phù hợp (HSK 1-6+). Hiển thị dưới dạng badge ngay dưới tiêu đề <h1>.
+
 Introduction & TL;DR:
 
 Introduction: Viết một đoạn giới thiệu ngắn gọn, hấp dẫn bằng tiếng Anh, tóm tắt chủ đề của tập podcast.
+
+Episode Summary (Song ngữ): Viết 3-4 câu tóm tắt nội dung tập podcast bằng tiếng Trung, kèm bản dịch tiếng Anh bên dưới. Phần này giúp người học luyện đọc hiểu ngay từ đầu.
 
 TL;DR (Too Long; Didn't Read): Dựa trên dữ liệu thời gian thực tế trong `script_content`, trích xuất 5-6 khoảnh khắc quan trọng từ script_content. Trình bày dưới dạng danh sách (<ul>). Mỗi mục phải có:
 
@@ -48,9 +54,26 @@ Bên trong phần nội dung, đặt một bình luận giữ chỗ: <!-- Transc
 
 Vocabulary & Grammar:
 
-Chọn 4-10 từ vựng hoặc cấu trúc ngữ pháp hữu ích (cấp độ hsk theo tiêu đề) từ {script_content}.
+Chọn 4-10 từ vựng hoặc cấu trúc ngữ pháp hữu ích từ {script_content}.
 
-Với mỗi mục, cung cấp: Term, Meaning, Explanation, và Example (trích từ script). Tất cả giải thích phải bằng tiếng Anh.
+Quy tắc chọn từ vựng:
+- ƯU TIÊN HÀNG ĐẦU: Trích xuất những từ vựng/cụm từ mà HOST ĐÃ GIẢI THÍCH TRỰC TIẾP trong podcast (thường ở cuối tập, trong phần "复习词语" hoặc tương tự). Đây là những từ quan trọng nhất vì người học vừa được nghe giải thích.
+- BỔ SUNG: Thêm 3-5 từ vựng khác mà AI cho là hữu ích cho người học nhưng host chưa giải thích.
+
+Trình bày thành 2 tầng:
+
+Tầng 1 - Bảng tổng quan (cho người muốn xem nhanh):
+Dùng thẻ <table class="vocab-table"> với 3 cột: Term, Meaning, Level (HSK level).
+
+Tầng 2 - Giải thích chi tiết (cho người muốn học sâu):
+Với mỗi mục, cung cấp: Term, Meaning, Explanation, From the podcast (trích dẫn chính xác câu nói của host khi giải thích từ đó - nếu có), và Example (trích từ script). Tất cả giải thích phải bằng tiếng Anh.
+
+Comprehension Check:
+
+Viết 3-5 câu hỏi kiểm tra hiểu bài, mỗi câu hỏi viết SONG NGỮ (tiếng Trung + tiếng Anh).
+Mỗi câu có đáp án ẩn bên trong thẻ <details>.
+Đáp án cũng viết song ngữ (tiếng Trung + tiếng Anh).
+Bao gồm: câu hỏi nội dung chính, câu hỏi chi tiết, câu hỏi suy luận.
 
 Engagement & Donate:
 
@@ -58,21 +81,18 @@ Viết một lời kêu gọi hành động (call-to-action) thân thiện bằn
 
 Sử dụng một thông điệp quyên góp chuẩn bằng tiếng Anh.
 
-✅ Tích hợp JavaScript (Rất quan trọng):
+✅ Tích hợp JavaScript:
 
 Iframe: Tự động chèn thẻ iframe placeholder của YouTube với id="ytplayer" và tham số &enablejsapi=1 vào src. Cấu trúc như sau: `<iframe id="ytplayer" src="https://www.youtube.com/embed/VIDEO_ID?enablejsapi=1" width="100%" height="315" frameborder="0" allowfullscreen></iframe>`
 
-Khối Script: Luôn luôn chèn khối mã JavaScript sau vào ngay trước thẻ đóng </body>. Khối mã này là bắt buộc để chức năng jumpToTime() hoạt động.
+LƯU Ý QUAN TRỌNG: KHÔNG chèn bất kỳ thẻ <script> nào vào body bài viết. Các file JavaScript đã được load tự động qua Blogger Theme.
 
-```
-<script src="https://www.youtube.com/iframe_api"></script>
-<script src="https://cdn.jsdelivr.net/gh/huy8895/huy8895.github.io.asset@45a8109/cdp-blog-assets/script.js"></script>
-```
 ✅ Cấu trúc đầu ra <body>...</body>: chỉ trả về dạng thuần html không cần "```"
 ```
 <body>
 
 <h1>🎙️ Podcast #XX｜[AI-EXTRACTED TITLE IN ENGLISH FROM YOUTUBE_METADATA]</h1>
+<span class="difficulty-badge">📊 HSK X-X · [Beginner/Intermediate/Advanced]</span>
 <p>
     <span style="font-weight: 700" id="greeting"></span>
     Welcome to <b>Chinese Daily Podcast | 每天中文</b> blog.
@@ -85,6 +105,7 @@ Khối Script: Luôn luôn chèn khối mã JavaScript sau vào ngay trước th
   <li><a href="#cultural">🌏 文化注解 / Cultural Note</a></li>
   <li><a href="#script">📄 文本 / Transcript</a></li>
   <li><a href="#explain">✍️ 词汇 & 语法 / Vocabulary & Grammar</a></li>
+  <li><a href="#quiz">🧠 理解测试 / Comprehension Check</a></li>
   <li><a href="#engage">💬 互动 / Engagement</a></li>
   <li><a href="#donate">☕ 打赏 / Donate</a></li>
 </ul>
@@ -96,6 +117,10 @@ Khối Script: Luôn luôn chèn khối mã JavaScript sau vào ngay trước th
 
 <h2 id="intro">📝 简介 / Introduction & Timestamp</h2>
 <p><!-- AI-generated: Short introduction in English. --></p>
+<div class="episode-summary">
+  <p class="summary-target"><!-- AI-generated: 3-4 câu tóm tắt bằng tiếng Trung. --></p>
+  <p class="summary-english"><em><!-- AI-generated: English translation of the summary above. --></em></p>
+</div>
 <p><strong>Timestamp:</strong></p>
 <ul class="timestamp-list">
   <!-- AI-generated: List with onclick="jumpToTime(SECONDS); return false;" -->
@@ -117,12 +142,35 @@ Khối Script: Luôn luôn chèn khối mã JavaScript sau vào ngay trước th
 
 <h2 id="explain">✍️ 词汇 & 语法 / Vocabulary & Grammar</h2>
 <p>Let's learn some useful HSK __ words and grammar patterns from today's podcast:</p>
+<table class="vocab-table">
+  <thead>
+    <tr><th>Term</th><th>Meaning</th><th>Level</th></tr>
+  </thead>
+  <tbody>
+    <!-- AI-generated: Quick-reference table rows. -->
+    <tr><td>词汇</td><td>English meaning</td><td>HSK X</td></tr>
+  </tbody>
+</table>
 <div class="explanation-item">
-  <!-- AI-generated: 4-10 items with explanations in English. 
+  <!-- AI-generated: 4-10 items with detailed explanations in English.
   <p><strong class="zh-term">词汇/语法</strong></p>
   <p><strong>Meaning:</strong> …</p>
   <p><strong>Explanation:</strong> …</p>
+  <p><strong>From the podcast:</strong> <span class="zh-example">"Host的原话解释"</span></p>
   <p><strong>Example:</strong> <span class="zh-example">…</span></p>
+  -->
+</div>
+
+<h2 id="quiz">🧠 理解测试 / Comprehension Check</h2>
+<p>Test your understanding of today's episode:</p>
+<div class="quiz-item">
+  <!-- AI-generated: 3-5 bilingual questions with hidden answers.
+  <p><strong>1.</strong> 中文问题？/ English question?</p>
+  <details>
+    <summary>显示答案 / Show Answer</summary>
+    <p>中文答案。</p>
+    <p><em>English answer.</em></p>
+  </details>
   -->
 </div>
 
@@ -147,4 +195,4 @@ ${step4_result}
 ```
 
 ${srt_content}
-``` 
+```

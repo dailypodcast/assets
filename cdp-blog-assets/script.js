@@ -145,7 +145,7 @@ function printFullPage() {
                     }
                     
                     /* Ẩn các thành phần không cần thiết khi in */
-                    .no-print, .video-container, #audio, .a2a_floating_style, .jdp-print-btn, .toc, #donate, #engage, #explain {
+                    .no-print, .video-container, #audio, .a2a_floating_style, .jdp-print-btn, .toc, #donate, #engage, #explain, #quiz {
                         display: none !important;
                     }
                     

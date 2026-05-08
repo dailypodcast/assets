@@ -149,6 +149,101 @@ ul.toc a {
     font-weight: 700;
 }
 
+/* --- Difficulty Badge --- */
+.difficulty-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 700;
+    margin-bottom: 1em;
+    letter-spacing: 0.5px;
+}
+
+/* --- Episode Summary (Song ngữ) --- */
+.episode-summary {
+    background-color: #f0f7ff;
+    border-left: 4px solid #0073e6;
+    padding: 1em 1.5em;
+    margin: 1.5em 0;
+    border-radius: 4px;
+}
+
+.episode-summary .summary-target {
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin-bottom: 0.5em;
+}
+
+.episode-summary .summary-english {
+    color: #666;
+    font-size: 0.95em;
+}
+
+/* --- Vocabulary Table (Bảng tổng quan từ vựng) --- */
+.vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+}
+
+.vocab-table thead {
+    background-color: #f5f5f5;
+}
+
+.vocab-table th,
+.vocab-table td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.vocab-table th {
+    font-weight: 700;
+    color: #4a4a4a;
+    border-bottom: 2px solid #ddd;
+}
+
+.vocab-table td:first-child {
+    font-size: 1.3em;
+    color: #d63384;
+    font-weight: 700;
+}
+
+.vocab-table tr:hover {
+    background-color: #fafafa;
+}
+
+/* --- Comprehension Check (Quiz) --- */
+.quiz-item {
+    margin-bottom: 1.5em;
+    padding: 0.8em 1.2em;
+    border-left: 3px solid #ff9800;
+    background-color: #fff9f0;
+    border-radius: 4px;
+}
+
+.quiz-item details {
+    margin-top: 0.5em;
+}
+
+.quiz-item summary {
+    cursor: pointer;
+    color: #0073e6;
+    font-weight: 700;
+    font-size: 0.9em;
+}
+
+.quiz-item summary:hover {
+    text-decoration: underline;
+}
+
+.quiz-item details[open] summary {
+    margin-bottom: 0.5em;
+}
+
 /* --- Floating Table of Contents --- */
 .floating-toc-container {
     position: fixed;
