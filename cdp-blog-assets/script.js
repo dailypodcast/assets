@@ -120,7 +120,7 @@ function printFullPage() {
     let styles = '';
     document.querySelectorAll('link[rel="stylesheet"], style').forEach(el => {
         // Bỏ qua các thẻ style/link liên quan đến AdSense
-        if (el.outerHTML.includes('adsbygoogle') || el.outerHTML.includes('googlesyndication')) continue;
+        if (el.outerHTML.includes('adsbygoogle') || el.outerHTML.includes('googlesyndication')) return;
         styles += el.outerHTML;
     });
 
