@@ -119,12 +119,36 @@ function printFullPage() {
     // 1. Lấy toàn bộ CSS của trang web hiện tại để giữ nguyên font chữ, màu sắc
     let styles = '';
     document.querySelectorAll('link[rel="stylesheet"], style').forEach(el => {
+        // Bỏ qua các thẻ style/link liên quan đến AdSense
+        if (el.outerHTML.includes('adsbygoogle') || el.outerHTML.includes('googlesyndication')) continue;
         styles += el.outerHTML;
     });
 
-    // Ưu tiên lấy vùng post-body trên Blogger để tránh lỗi CSS dàn trang, nếu không có thì lấy toàn bộ body
+    // 2. Clone nội dung để lọc quảng cáo mà không ảnh hưởng trang gốc
     const postContainer = document.querySelector('.post-body') || document.body;
-    const bodyContent = postContainer.innerHTML;
+    const clonedContent = postContainer.cloneNode(true);
+
+    // 3. Xóa tất cả các phần tử quảng cáo Google AdSense khỏi bản clone
+    const adSelectors = [
+        'ins.adsbygoogle',           // Khối quảng cáo chính của AdSense
+        '[id^="google_ads"]',        // Các container quảng cáo Google
+        '[id^="aswift_"]',           // Iframe quảng cáo Google
+        '.adsbygoogle',              // Class quảng cáo AdSense
+        'iframe[src*="googlesyndication"]',  // Iframe từ Google syndication
+        'iframe[src*="doubleclick"]',        // Iframe từ DoubleClick
+        'script[src*="adsbygoogle"]',        // Script AdSense
+        'script[src*="googlesyndication"]',  // Script Google syndication
+        '.ads',                      // Class ads chung
+        '#ads',                      // ID ads chung
+        '[data-ad-slot]',            // Phần tử có thuộc tính ad-slot
+        '[data-ad-client]',          // Phần tử có thuộc tính ad-client
+    ];
+
+    adSelectors.forEach(selector => {
+        clonedContent.querySelectorAll(selector).forEach(el => el.remove());
+    });
+
+    const bodyContent = clonedContent.innerHTML;
 
     printWindow.document.write(`
         <!DOCTYPE html>
@@ -147,6 +171,16 @@ function printFullPage() {
                     /* Ẩn các thành phần không cần thiết khi in */
                     .no-print, .video-container, #audio, .a2a_floating_style, .jdp-print-btn, .toc, #donate, #engage, #explain, #quiz {
                         display: none !important;
+                    }
+
+                    /* Ẩn quảng cáo Google AdSense (CSS fallback đề phòng) */
+                    ins.adsbygoogle, .adsbygoogle, [id^="google_ads"], [id^="aswift_"],
+                    iframe[src*="googlesyndication"], iframe[src*="doubleclick"],
+                    [data-ad-slot], [data-ad-client], .ads, #ads {
+                        display: none !important;
+                        height: 0 !important;
+                        max-height: 0 !important;
+                        overflow: hidden !important;
                     }
                     
                     /* Mở rộng không gian in */
