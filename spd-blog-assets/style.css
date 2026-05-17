@@ -11,9 +11,8 @@ body {
 .zh {
     font-family: "Montserrat Alternates", sans-serif;
     font-weight: 500;
-    font-style: italic;
-    font-size: 24pt;
-    line-height: 1.5;
+    font-size: 16pt;
+    line-height: 1.8;
 }
 
 h1,
@@ -120,6 +119,10 @@ a:hover {
 
 .transcript-content {
     margin-top: 1em;
+    font-family: "Montserrat Alternates", sans-serif;
+    font-size: 14pt;
+    line-height: 1.8;
+    color: #333;
 }
 
 .timestamp-list {
